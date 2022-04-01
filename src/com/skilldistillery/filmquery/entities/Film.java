@@ -19,7 +19,8 @@ public class Film {
 	private String rating;
 	private String specialFeatures;
 	private List<Actor> actors;
-	
+	private String language;
+
 	public Film() {
 		super();
 	}
@@ -136,22 +137,31 @@ public class Film {
 	public void setActors(List<Actor> actors) {
 		this.actors = actors;
 	}
-	
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
 	public List<String> getShortDetails() {
 		List<String> list = new ArrayList<String>();
 		list.add("ID: " + this.id);
 		list.add("Title: " + this.title);
 		list.add("Year: " + this.releaseYear);
 		list.add("Rating: " + this.rating);
-		//TODO: format for display wrapping
+		list.add("Language: " + this.language);
+		// TODO: format for display wrapping
 //		if (this.description.length() <= SETTINGS.MAX_WIDTH) {
-			list.add("Description: " + this.description);
+		list.add("Description: " + this.description);
 //		} else {
 //			int numLines = (int) Math.ceil(this.description.length() * 1.0 / SETTINGS.MAX_WIDTH);
 //			StringBuilder sb = new StringBuilder(this.description);
 //			list.add("Description: " + sb.substring(0, SETTINGS.MAX_WIDTH));
 //		}
-		
+
 		return list;
 	}
 
@@ -160,12 +170,12 @@ public class Film {
 		return "Film [id=" + id + ", title=" + title + ", description=" + description + ", releaseYear=" + releaseYear
 				+ ", languageId=" + languageId + ", rentalDuration=" + rentalDuration + ", rentalRate=" + rentalRate
 				+ ", length=" + length + ", replacementCost=" + replacementCost + ", rating=" + rating
-				+ ", specialFeatures=" + specialFeatures + ", actors=" + actors + "]";
+				+ ", specialFeatures=" + specialFeatures + ", actors=" + actors + ", language=" + language + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(actors, description, id, languageId, length, rating, releaseYear, rentalDuration,
+		return Objects.hash(actors, description, id, language, languageId, length, rating, releaseYear, rentalDuration,
 				rentalRate, replacementCost, specialFeatures, title);
 	}
 
@@ -179,8 +189,9 @@ public class Film {
 			return false;
 		Film other = (Film) obj;
 		return Objects.equals(actors, other.actors) && Objects.equals(description, other.description) && id == other.id
-				&& Objects.equals(languageId, other.languageId) && Objects.equals(length, other.length)
-				&& Objects.equals(rating, other.rating) && Objects.equals(releaseYear, other.releaseYear)
+				&& Objects.equals(language, other.language) && Objects.equals(languageId, other.languageId)
+				&& Objects.equals(length, other.length) && Objects.equals(rating, other.rating)
+				&& Objects.equals(releaseYear, other.releaseYear)
 				&& Objects.equals(rentalDuration, other.rentalDuration) && Objects.equals(rentalRate, other.rentalRate)
 				&& Objects.equals(replacementCost, other.replacementCost)
 				&& Objects.equals(specialFeatures, other.specialFeatures) && Objects.equals(title, other.title);
