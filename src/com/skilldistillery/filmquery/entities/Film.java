@@ -153,8 +153,6 @@ public class Film {
 		list.add("Year: " + this.releaseYear);
 		list.add("Rating: " + this.rating);
 		list.add("Language: " + this.language);
-		// TODO: format for display wrapping
-//		if (this.description.length() <= SETTINGS.MAX_WIDTH) {
 		list.add("Description: " + this.description);
 		for (int i = 0; i < actors.size(); i++) {
 			String header = actors.size() + " Actors: ";
@@ -168,11 +166,6 @@ public class Film {
 				list.add(empty + actors.get(i).getShortDetails());
 			}
 		}
-//		} else {
-//			int numLines = (int) Math.ceil(this.description.length() * 1.0 / SETTINGS.MAX_WIDTH);
-//			StringBuilder sb = new StringBuilder(this.description);
-//			list.add("Description: " + sb.substring(0, SETTINGS.MAX_WIDTH));
-//		}
 
 		return list;
 	}
