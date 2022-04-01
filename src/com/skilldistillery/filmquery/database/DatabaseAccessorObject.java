@@ -31,15 +31,15 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			throw new RuntimeException("Unable to load MYSQL " + className + " class");
 		}
 	}
-	
+
 	public int[] getMinMaxFilmIds() {
 		int min = 0;
 		int max = 0;
-		
+
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet filmResult = null;
-		
+
 		try {
 			conn = doConnection();
 			String sql = "SELECT MIN(id), MAX(id) FROM film;";
@@ -62,8 +62,8 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				System.err.println(this.getClass().getSimpleName() + " getMinMaxFilmIds()  error2");
 			}
 		}
-		
-		return new int[] {min, max};
+
+		return new int[] { min, max };
 	}
 
 	@Override
@@ -72,21 +72,20 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet filmResult = null;
-		
-		 try {
-			// Make connection
+
+		try {
 			conn = doConnection();
-			String sql = "SELECT id, " 			//1
-					+ "title, "				//2
-					+ "description, "		//3
-					+ "release_year, "		//4
-					+ "language_id, "		//5
-					+ "rental_duration, "	//6
-					+ "rental_rate, "		//7
-					+ "length, "			//8
-					+ "replacement_cost, "	//9
-					+ "rating, "			//10
-					+ "special_features "	//11
+			String sql = "SELECT id, " // 1
+					+ "title, " // 2
+					+ "description, " // 3
+					+ "release_year, " // 4
+					+ "language_id, " // 5
+					+ "rental_duration, " // 6
+					+ "rental_rate, " // 7
+					+ "length, " // 8
+					+ "replacement_cost, " // 9
+					+ "rating, " // 10
+					+ "special_features " // 11
 					+ "FROM film WHERE id = ?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
@@ -108,7 +107,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println(this.getClass().getSimpleName() + " findFilmById(int filmId) error1");
+			System.err.println(this.getClass().getSimpleName() + " findFilmById(int) error1");
 		} finally {
 			try {
 				filmResult.close();
@@ -116,11 +115,44 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-				System.err.println(this.getClass().getSimpleName() + " findFilmById(int actorId) error2");
+				System.err.println(this.getClass().getSimpleName() + " findFilmById(int) error2");
 			}
 		}
-		
+
 		return film;
+	}
+
+	@Override
+	public List<Film> findFilmByKeyword(String keyword) {
+		List<Film> list = null;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet filmResult = null;
+		try {
+			list = new ArrayList<Film>();
+			conn = doConnection();
+			String regex = "'%" + keyword + "%'";
+			String sql = "SELECT id FROM film WHERE title LIKE " + regex + " OR description LIKE " + regex + ";";
+			stmt = conn.prepareStatement(sql);
+			filmResult = stmt.executeQuery();
+			while (filmResult.next()) {
+				list.add(findFilmById(filmResult.getInt(1)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println(this.getClass().getSimpleName() + " findFilmByKeyword(String) error1");
+		} finally {
+			try {
+				filmResult.close();
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.err.println(this.getClass().getSimpleName() + " findFilmByKeyword(String) error2");
+			}
+		}
+
+		return list;
 	}
 
 	@Override
@@ -130,7 +162,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		PreparedStatement stmt = null;
 		ResultSet actorResult = null;
 		try {
-			// Make connection
 			conn = doConnection();
 			String sql = "SELECT id, first_name, last_name FROM actor WHERE id = ?";
 			stmt = conn.prepareStatement(sql);
@@ -145,7 +176,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println(this.getClass().getSimpleName() + " findActorById(int actorId) error1");
+			System.err.println(this.getClass().getSimpleName() + " findActorById(int) error1");
 		} finally {
 			try {
 				actorResult.close();
@@ -153,7 +184,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-				System.err.println(this.getClass().getSimpleName() + " findActorById(int actorId) error2");
+				System.err.println(this.getClass().getSimpleName() + " findActorById(int) error2");
 			}
 		}
 		return actor;
@@ -167,7 +198,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		ResultSet filmResult = null;
 
 		try {
-			// Make connection
 			conn = doConnection();
 			String sql = "SELECT a.id FROM actor a" + " JOIN film_actor fa ON a.id = fa.actor_id"
 					+ " JOIN film f ON f.id = fa.film_id" + " WHERE f.id = ?";
@@ -179,7 +209,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println(this.getClass().getSimpleName() + " findActorsByFilmId(int filmId) error1");
+			System.err.println(this.getClass().getSimpleName() + " findActorsByFilmId(int) error1");
 		} finally {
 			try {
 				filmResult.close();
@@ -187,7 +217,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-				System.err.println(this.getClass().getSimpleName() + " findActorsByFilmId(int filmId) error2");
+				System.err.println(this.getClass().getSimpleName() + " findActorsByFilmId(int) error2");
 			}
 		}
 

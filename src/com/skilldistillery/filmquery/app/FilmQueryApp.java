@@ -25,6 +25,7 @@ public class FilmQueryApp {
 //		System.out.println(actor);
 //		System.out.println(db.findActorsByFilmId(1));
 //		System.out.println(db.getMinMaxFilmIds());
+//		System.out.println(db.findFilmByKeyword("A"));
 	}
 
 	private void launch() {
