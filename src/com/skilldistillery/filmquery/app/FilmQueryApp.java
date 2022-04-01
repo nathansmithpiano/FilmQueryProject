@@ -111,12 +111,14 @@ public class FilmQueryApp {
 		}
 		//matches found, print short details
 		//if too many results, trim result size
+		int start = 0;
 		if (list.size() > SETTINGS.MAX_RESULTS) {
 			System.out.println("--- " + list.size() + " films found. Can only show " + SETTINGS.MAX_RESULTS + " at a time.");
 			System.out.println("--- Choose up to " + SETTINGS.MAX_RESULTS 
 					+ " films starting at result # (1-" + list.size() + ")");
 			int choice = getIntWithinRange(input, 1, list.size());
 			choice -= 1;
+			start = choice;
 			if (choice + SETTINGS.MAX_RESULTS > list.size() - 1) {
 				list = list.subList(choice - 1, list.size() - 1);
 			} else {
@@ -126,7 +128,7 @@ public class FilmQueryApp {
 		//display each film (up to SETTINGS.MAX_RESULTS)
 		for (int i = 0; i < list.size(); i++) {
 			Film film = list.get(i);
-			System.out.println("--- Film " + (i + 1) + " of " + list.size() 
+			System.out.println("--- Matched film " + (start + i + 1) + " of " + (start + list.size()) 
 						+ " with keyword \"" + keyword + "\" ---");
 			printFilmDetails(film.getShortDetails());
 		}
