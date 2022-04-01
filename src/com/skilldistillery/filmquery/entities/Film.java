@@ -148,12 +148,12 @@ public class Film {
 
 	public List<String> getShortDetails() {
 		List<String> list = new ArrayList<String>();
-		list.add("ID: " + this.id);
-		list.add("Title: " + this.title);
-		list.add("Year: " + this.releaseYear);
-		list.add("Rating: " + this.rating);
-		list.add("Language: " + this.language);
-		list.add("Description: " + this.description);
+		list.add("ID: " + id);
+		list.add("Title: " + title);
+		list.add("Year: " + releaseYear);
+		list.add("Rating: " + rating);
+		list.add("Language: " + language);
+		list.add("Description: " + description);
 		for (int i = 0; i < actors.size(); i++) {
 			String header = actors.size() + " Actors: ";
 			StringBuilder empty = new StringBuilder();
@@ -167,6 +167,16 @@ public class Film {
 			}
 		}
 
+		return list;
+	}
+	
+	public List<String> getAdditionalDetails() {
+		List<String> list = new ArrayList<String>();
+		list.add("Length: " + length);
+		list.add("Special Features: " + specialFeatures);
+		list.add("Rental Duration: " + rentalDuration);
+		list.add("Rental Rate: $" + rentalRate);
+		list.add("Replacement Cost: $" + replacementCost);
 		return list;
 	}
 
