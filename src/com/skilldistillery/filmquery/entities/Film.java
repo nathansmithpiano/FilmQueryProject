@@ -19,6 +19,7 @@ public class Film {
 	private String rating;
 	private String specialFeatures;
 	private List<Actor> actors;
+	private List<Category> categories;
 	private String language;
 
 	public Film() {
@@ -137,6 +138,14 @@ public class Film {
 	public void setActors(List<Actor> actors) {
 		this.actors = actors;
 	}
+	
+	public List<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
+	}
 
 	public String getLanguage() {
 		return language;
@@ -154,8 +163,35 @@ public class Film {
 		list.add("Rating: " + rating);
 		list.add("Language: " + language);
 		list.add("Description: " + description);
+		
+		//TODO: could do this via shared method but requires clever casting or overriding
+		//category list
+		for (int i = 0; i < categories.size(); i++) {
+			String header = "";
+			if (categories.size() == 1) {
+				header = categories.size() + " Category: ";
+			} else {
+				header = categories.size() + " Categories: ";
+			}
+			StringBuilder empty = new StringBuilder();
+			for (int j = 0; j < header.length(); j++) {
+				empty.append(" ");
+			}
+			if (i == 0) {
+				list.add(header + categories.get(i).getShortDetails());
+			} else {
+				list.add(empty + categories.get(i).getShortDetails());
+			}
+		}
+		
+		//actor list
 		for (int i = 0; i < actors.size(); i++) {
-			String header = actors.size() + " Actors: ";
+			String header = "";
+			if (actors.size() == 1) {
+				header = actors.size() + " Actor: ";
+			} else {
+				header = actors.size() + " Actors: ";
+			}
 			StringBuilder empty = new StringBuilder();
 			for (int j = 0; j < header.length(); j++) {
 				empty.append(" ");

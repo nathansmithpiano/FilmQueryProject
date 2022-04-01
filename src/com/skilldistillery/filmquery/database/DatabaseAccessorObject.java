@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.skilldistillery.filmquery.entities.Actor;
+import com.skilldistillery.filmquery.entities.Category;
 import com.skilldistillery.filmquery.entities.Film;
 
 public class DatabaseAccessorObject implements DatabaseAccessor {
@@ -75,21 +76,19 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 		try {
 			conn = doConnection();
-			String sql = "SELECT f.id, " 		// 1
-					+ "f.title, " 			// 2
-					+ "f.description, " 		// 3
-					+ "f.release_year, " 		// 4
-					+ "f.language_id, " 		// 5
-					+ "f.rental_duration, " 	// 6
-					+ "f.rental_rate, "		// 7
-					+ "f.length, " 			// 8
-					+ "f.replacement_cost, " 	// 9
-					+ "f.rating, " 			// 10
-					+ "f.special_features, " 	// 11
-					+ "l.name "				// 12
-					+ "FROM film f"
-					+ " JOIN language l ON f.language_id = l.id"
-					+ " WHERE f.id = ?";
+			String sql = "SELECT f.id, " // 1
+					+ "f.title, " // 2
+					+ "f.description, " // 3
+					+ "f.release_year, " // 4
+					+ "f.language_id, " // 5
+					+ "f.rental_duration, " // 6
+					+ "f.rental_rate, " // 7
+					+ "f.length, " // 8
+					+ "f.replacement_cost, " // 9
+					+ "f.rating, " // 10
+					+ "f.special_features, " // 11
+					+ "l.name " // 12
+					+ "FROM film f" + " JOIN language l ON f.language_id = l.id" + " WHERE f.id = ?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
 			filmResult = stmt.executeQuery();
@@ -108,6 +107,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				film.setSpecialFeatures(filmResult.getString(11));
 				film.setLanguage(filmResult.getString(12));
 				film.setActors(findActorsByFilmId(filmId));
+				film.setCategories(findCategoriesByFilmId(filmId));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -153,6 +153,45 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.err.println(this.getClass().getSimpleName() + " findFilmByKeyword(String) error2");
+			}
+		}
+
+		return list;
+	}
+
+	public List<Category> findCategoriesByFilmId(int filmId) {
+		List<Category> list = new ArrayList<Category>();
+
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet categoryResult = null;
+
+		try {
+			conn = doConnection();
+			String sql = "SELECT c.id, c.name FROM category c" 
+						+ " JOIN film_category fc ON c.id = fc.category_id"
+						+ " JOIN film f ON fc.film_id = f.id"
+						+ " WHERE f.id = ?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, filmId);
+			categoryResult = stmt.executeQuery();
+			while (categoryResult.next()) {
+				Category cat = new Category();
+				cat.setId(categoryResult.getInt(1));
+				cat.setName(categoryResult.getString(2));
+				list.add(cat);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println(this.getClass().getSimpleName() + " findCategoryNamesByFilmId(int) error1");
+		} finally {
+			try {
+				categoryResult.close();
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.err.println(this.getClass().getSimpleName() + " findCategoryNamesByFilmId(int) error2");
 			}
 		}
 
