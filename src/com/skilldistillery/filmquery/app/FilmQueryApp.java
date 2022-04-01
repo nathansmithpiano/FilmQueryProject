@@ -53,6 +53,7 @@ public class FilmQueryApp {
 			getFilmById(input);
 			break;
 		case 2:
+			getFilmsByKeyword(input);
 			break;
 		case 3:
 			exit();
@@ -86,9 +87,55 @@ public class FilmQueryApp {
 		return film;
 	}
 	
+	private List<Film> getFilmsByKeyword(Scanner input) {
+		
+		System.out.println("----- FIND FILM BY KEYWORD -----");
+		System.out.println("----- Will search in film's title or description -----");
+		System.out.print("Keyword: ");
+		String keyword = input.next();
+		keyword += input.nextLine();
+		keyword = keyword.trim();
+		List<Film> list = db.findFilmByKeyword(keyword);
+		
+		//no matches found
+		if (list.size() == 0) {
+			System.out.println("--- No films found.  Try again?");
+			System.out.println("--- 1. Yes");
+			System.out.println("--- 2. No");
+			int choice = getIntWithinRange(input, 1, 2);
+			if (choice == 1) {
+				getFilmsByKeyword(input);
+			} else {
+				doMainMenu(input);
+			}
+		}
+		//matches found, print short details
+		//if too many results, trim result size
+		if (list.size() > SETTINGS.MAX_RESULTS) {
+			System.out.println("--- " + list.size() + " films found. Can only show " + SETTINGS.MAX_RESULTS + " at a time.");
+			System.out.println("--- Choose up to " + SETTINGS.MAX_RESULTS 
+					+ " films starting at result # (1-" + list.size() + ")");
+			int choice = getIntWithinRange(input, 1, list.size());
+			choice -= 1;
+			if (choice + SETTINGS.MAX_RESULTS > list.size() - 1) {
+				list = list.subList(choice - 1, list.size() - 1);
+			} else {
+				list = list.subList(choice,  choice + SETTINGS.MAX_RESULTS);
+			}
+		}
+		//display each film (up to SETTINGS.MAX_RESULTS)
+		for (int i = 0; i < list.size(); i++) {
+			Film film = list.get(i);
+			System.out.println("--- Film " + (i + 1) + " of " + list.size() 
+						+ " with keyword \"" + keyword + "\" ---");
+			printFilmDetails(film.getShortDetails());
+		}
+		return list;
+	}
+	
 	private void printFilmDetails(List<String> list) {
 		for (String str : list) {
-			System.out.println(str);
+			System.out.println("\t" + str);
 		}
 	}
 
