@@ -40,6 +40,10 @@ public class Actor {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	
+	public String getShortDetails() {
+		return firstName + " " + lastName + " (id " + id + ")";
+	}
 
 	@Override
 	public String toString() {

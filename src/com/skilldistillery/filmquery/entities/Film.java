@@ -156,6 +156,18 @@ public class Film {
 		// TODO: format for display wrapping
 //		if (this.description.length() <= SETTINGS.MAX_WIDTH) {
 		list.add("Description: " + this.description);
+		for (int i = 0; i < actors.size(); i++) {
+			String header = actors.size() + " Actors: ";
+			StringBuilder empty = new StringBuilder();
+			for (int j = 0; j < header.length(); j++) {
+				empty.append(" ");
+			}
+			if (i == 0) {
+				list.add(header + actors.get(i).getShortDetails());
+			} else {
+				list.add(empty + actors.get(i).getShortDetails());
+			}
+		}
 //		} else {
 //			int numLines = (int) Math.ceil(this.description.length() * 1.0 / SETTINGS.MAX_WIDTH);
 //			StringBuilder sb = new StringBuilder(this.description);
