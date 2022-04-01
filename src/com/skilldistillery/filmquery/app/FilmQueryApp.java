@@ -24,6 +24,7 @@ public class FilmQueryApp {
 //		Actor actor = db.findActorById(1);
 //		System.out.println(actor);
 //		System.out.println(db.findActorsByFilmId(1));
+		System.out.println(db.getMinMaxFilmIds());
 
 	}
 
@@ -51,6 +52,16 @@ public class FilmQueryApp {
 		case 3:
 			exit();
 		}
+	}
+	
+	private Film getFilmById(Scanner input) {
+		Film film = null;
+		
+		System.out.println("----- FIND FILM BY ID -----");
+		int choice = getIntWithinRange(input, 1, 3);
+		
+		
+		return film;
 	}
 
 	private int getIntWithinRange(Scanner input, int min, int max) {

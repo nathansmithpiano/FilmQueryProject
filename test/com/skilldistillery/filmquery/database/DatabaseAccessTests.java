@@ -38,6 +38,13 @@ class DatabaseAccessTests {
 	  assertEquals(f.getTitle(), "ACADEMY DINOSAUR");
   }
   
+  @Test
+  void test_getMinMaxFilmIds_returns_1_1000() {
+	  int[] range = db.getMinMaxFilmIds();
+	  assertEquals(range[0], 1);
+	  assertEquals(range[1], 1000);
+  }
+  
   //ACTOR TESTS
   //findActorById
   @Test

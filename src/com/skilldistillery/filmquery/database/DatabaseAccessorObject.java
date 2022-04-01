@@ -31,6 +31,40 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			throw new RuntimeException("Unable to load MYSQL " + className + " class");
 		}
 	}
+	
+	public int[] getMinMaxFilmIds() {
+		int min = 0;
+		int max = 0;
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet filmResult = null;
+		
+		try {
+			conn = doConnection();
+			String sql = "SELECT MIN(id), MAX(id) FROM film;";
+			stmt = conn.prepareStatement(sql);
+			filmResult = stmt.executeQuery();
+			while (filmResult.next()) {
+				min = filmResult.getInt(1);
+				max = filmResult.getInt(2);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println(this.getClass().getSimpleName() + " getMinMaxFilmIds() error1");
+		} finally {
+			try {
+				filmResult.close();
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.err.println(this.getClass().getSimpleName() + " getMinMaxFilmIds()  error2");
+			}
+		}
+		
+		return new int[] {min, max};
+	}
 
 	@Override
 	public Film findFilmById(int filmId) {
