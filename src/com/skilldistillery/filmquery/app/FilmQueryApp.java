@@ -1,15 +1,15 @@
 package com.skilldistillery.filmquery.app;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 import com.skilldistillery.filmquery.database.DatabaseAccessor;
 import com.skilldistillery.filmquery.database.DatabaseAccessorObject;
-import com.skilldistillery.filmquery.entities.Actor;
 import com.skilldistillery.filmquery.entities.Film;
 
 public class FilmQueryApp {
-
+	
 	DatabaseAccessor db = new DatabaseAccessorObject();
 
 	public static void main(String[] args) throws SQLException {
@@ -24,8 +24,7 @@ public class FilmQueryApp {
 //		Actor actor = db.findActorById(1);
 //		System.out.println(actor);
 //		System.out.println(db.findActorsByFilmId(1));
-		System.out.println(db.getMinMaxFilmIds());
-
+//		System.out.println(db.getMinMaxFilmIds());
 	}
 
 	private void launch() {
@@ -33,8 +32,12 @@ public class FilmQueryApp {
 		startUserInterface(input);
 		input.close();
 	}
+	
+	public void startUserInterface(Scanner input) {
+		doMainMenu(input);
+	}
 
-	private void startUserInterface(Scanner input) {
+	private void doMainMenu(Scanner input) {
 		System.out.println("-------------------------------------");
 		System.out.println("--- Welcome to Film Query Project ---");
 		System.out.println("-------------------------------------");
@@ -46,6 +49,7 @@ public class FilmQueryApp {
 		int choice = getIntWithinRange(input, 1, 3);
 		switch (choice) {
 		case 1:
+			getFilmById(input);
 			break;
 		case 2:
 			break;
@@ -58,10 +62,33 @@ public class FilmQueryApp {
 		Film film = null;
 		
 		System.out.println("----- FIND FILM BY ID -----");
-		int choice = getIntWithinRange(input, 1, 3);
+		int[] range = db.getMinMaxFilmIds();
+		int choice = getIntWithinRange(input, range[0], range[1]);
+		film = db.findFilmById(choice);
 		
+		//no match found
+		if (film == null) {
+			System.out.println("--- No film found with ID: " + choice + " ---");
+			System.out.println("--- Try again? ---");
+			System.out.println("--- 1. Yes");
+			System.out.println("--- 2. No, go back to main menu");
+			choice = getIntWithinRange(input, 1, 2);
+			if (choice == 1) {
+				getFilmById(input);
+			} else {
+				doMainMenu(input);
+			}
+		}
+		
+		printFilmDetails(film.getShortDetails());
 		
 		return film;
+	}
+	
+	private void printFilmDetails(List<String> list) {
+		for (String str : list) {
+			System.out.println(str);
+		}
 	}
 
 	private int getIntWithinRange(Scanner input, int min, int max) {

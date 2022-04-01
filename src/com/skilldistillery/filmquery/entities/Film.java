@@ -1,7 +1,10 @@
 package com.skilldistillery.filmquery.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import com.skilldistillery.filmquery.app.SETTINGS;
 
 public class Film {
 	private int id;
@@ -132,6 +135,24 @@ public class Film {
 
 	public void setActors(List<Actor> actors) {
 		this.actors = actors;
+	}
+	
+	public List<String> getShortDetails() {
+		List<String> list = new ArrayList<String>();
+		list.add("ID: " + this.id);
+		list.add("Title: " + this.title);
+		list.add("Year: " + this.releaseYear);
+		list.add("Rating: " + this.rating);
+		//TODO: format for display wrapping
+//		if (this.description.length() <= SETTINGS.MAX_WIDTH) {
+			list.add("Description: " + this.description);
+//		} else {
+//			int numLines = (int) Math.ceil(this.description.length() * 1.0 / SETTINGS.MAX_WIDTH);
+//			StringBuilder sb = new StringBuilder(this.description);
+//			list.add("Description: " + sb.substring(0, SETTINGS.MAX_WIDTH));
+//		}
+		
+		return list;
 	}
 
 	@Override
