@@ -11,6 +11,7 @@ import java.util.List;
 import com.skilldistillery.filmquery.entities.Actor;
 import com.skilldistillery.filmquery.entities.Category;
 import com.skilldistillery.filmquery.entities.Film;
+import com.skilldistillery.filmquery.entities.InventoryItem;
 
 public class DatabaseAccessorObject implements DatabaseAccessor {
 
@@ -32,7 +33,8 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			throw new RuntimeException("Unable to load MYSQL " + className + " class");
 		}
 	}
-
+	
+	@Override
 	public int[] getMinMaxFilmIds() {
 		int min = 0;
 		int max = 0;
@@ -108,6 +110,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				film.setLanguage(filmResult.getString(12));
 				film.setActors(findActorsByFilmId(filmId));
 				film.setCategories(findCategoriesByFilmId(filmId));
+				film.setInventory(findInventoryItemsByFilmId(filmId));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -158,7 +161,8 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 		return list;
 	}
-
+	
+	@Override
 	public List<Category> findCategoriesByFilmId(int filmId) {
 		List<Category> list = new ArrayList<Category>();
 
@@ -195,6 +199,53 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			}
 		}
 
+		return list;
+	}
+	
+	@Override
+	public List<InventoryItem> findInventoryItemsByFilmId(int filmId) {
+		List<InventoryItem> list = new ArrayList<InventoryItem>();
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet inventoryResult = null;
+		
+		try {
+			conn = doConnection();
+			String sql = "SELECT i.id, " 		//1
+						+ "i.film_id, "			//2
+						+ "i.store_id, "		//3
+						+ "i.media_condition,"	//4
+						+ "i.last_update "		//5
+					+ "FROM inventory_item i" 
+						+ " JOIN film f ON i.film_id = f.id"
+						+ " WHERE f.id = ?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, filmId);
+			inventoryResult = stmt.executeQuery();
+			while (inventoryResult.next()) {
+				InventoryItem item = new InventoryItem();
+				item.setId(inventoryResult.getInt(1));
+				item.setFilmId(inventoryResult.getInt(2));
+				item.setStoreId(inventoryResult.getInt(3));
+				item.setMediaCondition(inventoryResult.getString(4));
+				item.setLastUpdate(inventoryResult.getString(5));
+				list.add(item);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println(this.getClass().getSimpleName() + " findInventoryItemsByFilmId(int) error1");
+		} finally {
+			try {
+				inventoryResult.close();
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.err.println(this.getClass().getSimpleName() + " findInventoryItemsByFilmId(int) error2");
+			}
+		}
+		
 		return list;
 	}
 

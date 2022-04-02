@@ -85,10 +85,10 @@ public class FilmQueryApp {
 		printFilmDetails(film.getShortDetails());
 		
 		System.out.println("--- MORE OPTIONS ---");
-		System.out.println("--- 1. Return to main menu");
-		System.out.println("--- 2. View all film details");
+		System.out.println("--- 1. View all film details");
+		System.out.println("--- 2. Return to main menu");
 		choice = getIntWithinRange(input, 1, 2);
-		if (choice == 1) {
+		if (choice == 2) {
 			doMainMenu(input);
 		} else {
 			System.out.println("--- VIEWING ALL FILM DETAILS ---");
@@ -97,10 +97,10 @@ public class FilmQueryApp {
 		}
 		
 		System.out.println("--- MORE OPTIONS ---");
-		System.out.println("--- 1. Return to main menu");
-		System.out.println("--- 2. Find another film by ID");
+		System.out.println("--- 1. Find another film by ID");
+		System.out.println("--- 2. Return to main menu");
 		choice = getIntWithinRange(input, 1, 2);
-		if (choice == 1) {
+		if (choice == 2) {
 			doMainMenu(input);
 		} else {
 			getFilmById(input);
@@ -122,7 +122,7 @@ public class FilmQueryApp {
 		if (list.size() == 0) {
 			System.out.println("--- No films found.  Try again?");
 			System.out.println("--- 1. Yes");
-			System.out.println("--- 2. No");
+			System.out.println("--- 2. No, go back to main menu");
 			int choice = getIntWithinRange(input, 1, 2);
 			if (choice == 1) {
 				getFilmsByKeyword(input);

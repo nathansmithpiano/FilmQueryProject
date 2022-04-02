@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.skilldistillery.filmquery.app.SETTINGS;
-
 public class Film {
 	private int id;
 	private String title;
@@ -18,9 +16,10 @@ public class Film {
 	private Double replacementCost;
 	private String rating;
 	private String specialFeatures;
+	private String language;
 	private List<Actor> actors;
 	private List<Category> categories;
-	private String language;
+	private List<InventoryItem> inventory;
 
 	public Film() {
 		super();
@@ -138,7 +137,7 @@ public class Film {
 	public void setActors(List<Actor> actors) {
 		this.actors = actors;
 	}
-	
+
 	public List<Category> getCategories() {
 		return categories;
 	}
@@ -155,6 +154,14 @@ public class Film {
 		this.language = language;
 	}
 
+	public List<InventoryItem> getInventory() {
+		return inventory;
+	}
+
+	public void setInventory(List<InventoryItem> inventory) {
+		this.inventory = inventory;
+	}
+
 	public List<String> getShortDetails() {
 		List<String> list = new ArrayList<String>();
 		list.add("ID: " + id);
@@ -163,9 +170,10 @@ public class Film {
 		list.add("Rating: " + rating);
 		list.add("Language: " + language);
 		list.add("Description: " + description);
-		
-		//TODO: could do this via shared method but requires clever casting or overriding
-		//category list
+
+		// TODO: could do this via shared method but requires clever casting or
+		// overriding
+		// category list
 		for (int i = 0; i < categories.size(); i++) {
 			String header = "";
 			if (categories.size() == 1) {
@@ -183,8 +191,8 @@ public class Film {
 				list.add(empty + categories.get(i).getShortDetails());
 			}
 		}
-		
-		//actor list
+
+		// actor list
 		for (int i = 0; i < actors.size(); i++) {
 			String header = "";
 			if (actors.size() == 1) {
@@ -203,9 +211,23 @@ public class Film {
 			}
 		}
 
+		// inventory list
+		for (int i = 0; i < inventory.size(); i++) {
+			String header = inventory.size() + " in inventory: ";
+			StringBuilder empty = new StringBuilder();
+			for (int j = 0; j < header.length(); j++) {
+				empty.append(" ");
+			}
+			if (i == 0) {
+				list.add(header + inventory.get(i).getShortDetails());
+			} else {
+				list.add(empty + inventory.get(i).getShortDetails());
+			}
+		}
+
 		return list;
 	}
-	
+
 	public List<String> getAdditionalDetails() {
 		List<String> list = new ArrayList<String>();
 		list.add("Length: " + length);
