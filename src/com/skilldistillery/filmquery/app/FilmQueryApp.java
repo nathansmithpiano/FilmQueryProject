@@ -155,6 +155,16 @@ public class FilmQueryApp {
 						+ " with keyword \"" + keyword + "\" ---");
 			printFilmDetails(film.getShortDetails());
 		}
+		
+		System.out.println("--- MORE OPTIONS ---");
+		System.out.println("--- 1. Find another film by keyword");
+		System.out.println("--- 2. Return to main menu");
+		int choice = getIntWithinRange(input, 1, 2);
+		if (choice == 2) {
+			doMainMenu(input);
+		} else {
+			getFilmsByKeyword(input);
+		}
 	}
 	
 	private void printFilmDetails(List<String> list) {
