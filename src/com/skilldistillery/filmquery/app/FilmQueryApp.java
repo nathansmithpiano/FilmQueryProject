@@ -140,12 +140,17 @@ public class FilmQueryApp {
 			int results = getIntWithinRange(input, 1, list.size());
 			System.out.println("--- Show up to " + results + " results starting with result # (1-" + list.size() + ")");
 			int choice = getIntWithinRange(input, 1, list.size());
-//			choice -= 1;
+			choice -= 1;
+//			results -= 1;
 			start = choice;
 			if (choice + results > list.size() - 1) {
-				list = list.subList(choice - 1, list.size() - 1);
+				System.out.println("if");
+				list = list.subList(choice, list.size());
+				System.out.println(list.size());
 			} else {
+				System.out.println("else");
 				list = list.subList(choice,  choice + results);
+				System.out.println(list.size());
 			}
 		}
 		//display each film (up to SETTINGS.MAX_RESULTS)
