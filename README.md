@@ -1,6 +1,8 @@
 # FilmQueryProject
 
   -- Developed for Skill Distillery Bootcamp Cohort 32 --
+  
+  View this project deployed on AWS: http://52.52.235.108:8080/MVCFilmSite
 
 ### Description
 
